@@ -1,0 +1,173 @@
+<p-toast position="top-left"></p-toast>
+
+<div class="login-wrapper">
+  <div class="login-card" role="main" aria-labelledby="loginTitle">
+    <h2 id="loginTitle">Bem vindo ao Task Manager!</h2>
+    <p class="subtitle">Faça o Login para Continuar</p>
+
+    <form (ngSubmit)="onSubmit()" #loginForm="ngForm" novalidate autocomplete="off" aria-describedby="loginErrors">
+      <label for="email">Email</label>
+      <input id="email" name="email" type="email" pInputText [(ngModel)]="email" required email #emailField="ngModel"
+        aria-required="true" [attr.aria-invalid]="emailField.invalid && emailField.touched" />
+
+      <label for="password">Senha</label>
+      <p-password id="password" name="password" [(ngModel)]="password" required #passwordField="ngModel"
+        [toggleMask]="true" [feedback]="false" aria-required="true"
+        [attr.aria-invalid]="passwordField.invalid && passwordField.touched"></p-password>
+
+      <button pButton type="submit" label="Entrar" [disabled]="loginForm.invalid" class="login-button"
+        aria-label="Entrar no sistema"></button>
+
+      <p class="courses-link" (click)="showRegisterModal($event)" aria-label="Abrir modal de cadastro">Registre-se</p>
+
+
+    </form>
+  </div>
+
+  <p-dialog header="Cadastro de Usuário" [(visible)]="visible" [modal]="true"
+    [style]="{ width: '360px', maxWidth: '95vw' }" [closable]="false" (onHide)="cancelRegister()" aria-modal="true"
+    role="dialog" [focusOnShow]="true">
+    <form #registerForm="ngForm" (ngSubmit)="onRegister(registerForm)" novalidate autocomplete="off"
+      aria-describedby="registerErrors" class="register-form p-fluid" [style]="{ padding: '0.6rem' }">
+      <!-- Nome Field -->
+      <div class="p-field">
+        <p-inputgroup class="p-field-full-width">
+          <p-inputgroup-addon>
+            <i class="pi pi-user"></i>
+          </p-inputgroup-addon>
+          <p-floatlabel variant="on">
+            <input pInputText id="nome" name="nome" type="text" [(ngModel)]="registerData.nome" required maxlength="100"
+              #nomeField="ngModel" aria-required="true" [attr.aria-invalid]="nomeField.invalid && nomeField.touched" />
+            <label for="nome">Nome</label>
+          </p-floatlabel>
+        </p-inputgroup>
+        <div *ngIf="nomeField.invalid && nomeField.touched">
+          <p-message severity="error" text="Nome é obrigatório e no máximo 100 caracteres."
+            *ngIf="nomeField.errors?.['required'] || nomeField.errors?.['maxlength']"></p-message>
+        </div>
+      </div>
+
+      <!-- Email Field -->
+      <div class="p-field">
+        <p-inputgroup class="p-field-full-width">
+          <p-inputgroup-addon>
+            <i class="pi pi-envelope"></i>
+          </p-inputgroup-addon>
+          <p-floatlabel variant="on">
+            <input pInputText id="emailRegister" name="emailRegister" type="email" [(ngModel)]="registerData.email"
+              required email maxlength="150" #emailRegisterField="ngModel" aria-required="true"
+              [attr.aria-invalid]="emailRegisterField.invalid && emailRegisterField.touched" />
+            <label for="emailRegister">Email</label>
+          </p-floatlabel>
+        </p-inputgroup>
+        <div *ngIf="emailRegisterField.invalid && emailRegisterField.touched">
+          <p-message severity="error" text="Email é obrigatório."
+            *ngIf="emailRegisterField.errors?.['required']"></p-message>
+          <p-message severity="error" text="Email inválido." *ngIf="emailRegisterField.errors?.['email']"></p-message>
+          <p-message severity="error" text="Email no máximo 150 caracteres."
+            *ngIf="emailRegisterField.errors?.['maxlength']"></p-message>
+        </div>
+      </div>
+
+      <!-- Password Field -->
+      <div class="p-field">
+        <p-inputgroup class="p-field-full-width">
+          <p-inputgroup-addon>
+            <i class="pi pi-lock"></i>
+          </p-inputgroup-addon>
+          <p-floatlabel variant="on">
+            <p-password id="passwordRegister" name="passwordRegister" [(ngModel)]="registerData.password" required
+              [minlength]="6" [maxlength]="16" #passwordRegisterField="ngModel" [toggleMask]="true" [feedback]="true"
+              aria-required="true"
+              [attr.aria-invalid]="passwordRegisterField.invalid && passwordRegisterField.touched"></p-password>
+            <label for="passwordRegister">Senha</label>
+          </p-floatlabel>
+        </p-inputgroup>
+        <div *ngIf="passwordRegisterField.invalid && passwordRegisterField.touched">
+          <p-message severity="error" text="Senha é obrigatória."
+            *ngIf="passwordRegisterField.errors?.['required']"></p-message>
+          <p-message severity="error" text="Senha deve ter entre 6 e 16 caracteres."
+            *ngIf="passwordRegisterField.errors?.['minlength'] || passwordRegisterField.errors?.['maxlength']"></p-message>
+        </div>
+      </div>
+
+      
+
+      <div class="p-field">
+        <p-inputgroup class="p-field-full-width">
+          <p-inputgroup-addon>
+            <i class="pi pi-id-card"></i>
+          </p-inputgroup-addon>
+          <p-floatlabel variant="on">
+            <p-inputMask
+              id="documento"
+              name="documento"
+              mask="999.999.999-99"
+              [(ngModel)]="registerData.documento"
+              required
+              #documentoField="ngModel"
+              aria-required="true"
+              [attr.aria-invalid]="documentoField.invalid && documentoField.touched"
+              [style]="{width: '100%'}"
+            ></p-inputMask>
+            <label for="documento">Documento (CPF)</label>
+          </p-floatlabel>
+        </p-inputgroup>
+        <div *ngIf="documentoField.invalid && documentoField.touched">
+          <p-message severity="error" text="Documento é obrigatório." *ngIf="documentoField.errors?.['required']"></p-message>
+          <p-message severity="error" text="Documento deve ter 11 dígitos." *ngIf="documentoField.errors?.['mask']"></p-message>
+        </div>
+      </div>
+
+
+      <!-- Endereço Field -->
+      <div class="p-field">
+        <p-inputgroup class="p-field-full-width">
+          <p-inputgroup-addon>
+            <i class="pi pi-home"></i>
+          </p-inputgroup-addon>
+          <p-floatlabel variant="on">
+            <input pInputText id="endereco" name="endereco" type="text" [(ngModel)]="registerData.endereco" required
+              maxlength="250" #enderecoField="ngModel" aria-required="true"
+              [attr.aria-invalid]="enderecoField.invalid && enderecoField.touched" />
+            <label for="endereco">Endereço</label>
+          </p-floatlabel>
+        </p-inputgroup>
+        <div *ngIf="enderecoField.invalid && enderecoField.touched">
+          <p-message severity="error" text="Endereço é obrigatório e no máximo 250 caracteres."
+            *ngIf="enderecoField.errors?.['required'] || enderecoField.errors?.['maxlength']"></p-message>
+        </div>
+      </div>
+
+      <!-- Captcha Field -->
+      <div class="p-field captcha-field">
+        <p-inputgroup class="p-field-full-width">
+          <p-inputgroup-addon>
+            <i class="pi pi-calculator"></i>
+          </p-inputgroup-addon>
+          <p-floatlabel variant="on">
+            <input pInputText id="captcha" name="captcha" type="number" [(ngModel)]="captchaAnswer" required
+              #captchaField="ngModel" aria-required="true"
+              [attr.aria-invalid]="captchaField.invalid && captchaField.touched" />
+            <label for="captcha">Quanto é {{ num1 }} + {{ num2 }}?</label>
+          </p-floatlabel>
+        </p-inputgroup>
+        <div *ngIf="captchaField.invalid && captchaField.touched">
+          <p-message severity="error" text="Resposta do Captcha é obrigatória."
+            *ngIf="captchaField.errors?.['required']"></p-message>
+        </div>
+        <div *ngIf="captchaField.valid && captchaField.touched && !validateCaptcha()">
+          <p-message severity="error" text="Resposta da soma incorreta." *ngIf="!validateCaptcha()"></p-message>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <p-button label="Cancelar" severity="secondary" (click)="cancelRegister(registerForm)" type="button"
+          aria-label="Cancelar cadastro"></p-button>
+
+        <p-button label="Salvar" [disabled]="registerForm.invalid || !validateCaptcha()" type="submit"
+          aria-label="Salvar cadastro"></p-button>
+      </div>
+    </form>
+  </p-dialog>
+</div>

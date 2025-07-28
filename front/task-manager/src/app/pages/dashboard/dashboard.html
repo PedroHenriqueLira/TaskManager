@@ -1,0 +1,378 @@
+<div class="dashboard-container p-4 bg-surface-0 min-h-screen">
+  <p-toast position="top-left"></p-toast>
+  <p-confirmDialog></p-confirmDialog>
+
+  <div class="loading-overlay" *ngIf="isInitialLoading">
+    <p-progressSpinner styleClass="w-4rem h-4rem" strokeWidth="4"></p-progressSpinner>
+    <span class="ml-2 text-lg text-text-secondary">Carregando tarefas...</span>
+  </div>
+
+  <div class="content-wrapper" [ngClass]="{'fade-in': !isInitialLoading, 'hidden': isInitialLoading}">
+    <header class="flex justify-content-between align-items-center mb-6">
+      <h1 class="text-3xl font-bold text-text-primary" role="heading" aria-level="1">Dashboard de Tarefas</h1>
+      <div class="flex gap-2">
+        <p-button label="Cadastrar Tarefa" icon="pi pi-plus" styleClass="p-button-primary p-button-sm"
+          (click)="openEditModal(null)" aria-label="Criar nova tarefa"></p-button>
+
+        <p-button label="Logout" icon="pi pi-sign-out" styleClass="p-button-secondary p-button-sm"
+          aria-label="Sair da aplicação" (click)="logout()"></p-button>
+      </div>
+    </header>
+
+    <section class="grid mb-4 px-4 gap-4" role="region" aria-label="Resumo de tarefas e gráfico de prioridades">
+      <!-- Coluna 1: Cards de Métricas -->
+      <div class="col-12 lg:col-4 flex flex-column gap-4">
+        <p-card styleClass="summary-card bg-blue-50 border-blue-500 shadow-2">
+          <div class="flex flex-column align-items-center p-2">
+            <i class="pi pi-spinner text-3xl text-blue-600 mb-2" aria-hidden="true"></i>
+            <span class="text-lg font-semibold text-blue-700">Tarefas Em Andamento</span>
+            <span class="text-2xl font-bold text-blue-800">{{ dashboardSummary.emAndamento }}</span>
+          </div>
+        </p-card>
+        <p-card styleClass="summary-card bg-green-50 border-green-500 shadow-2">
+          <div class="flex flex-column align-items-center p-2">
+            <i class="pi pi-check-circle text-3xl text-green-600 mb-2" aria-hidden="true"></i>
+            <span class="text-lg font-semibold text-green-700">Tarefas Concluídas</span>
+            <span class="text-2xl font-bold text-green-800">{{ dashboardSummary.concluido }}</span>
+          </div>
+        </p-card>
+      </div>
+
+      <!-- Coluna 2: Gráfico -->
+      <div class="col-12 lg:col-7">
+        <p-card styleClass="shadow-2 h-full flex flex-column">
+          <ng-template pTemplate="header">
+            <div class="text-xl font-bold p-3">GRÁFICO: QUANTIDADE DE TICKETS POR PRIORIDADE</div>
+          </ng-template>
+          <div class="flex flex-column align-items-center justify-content-center h-full text-text-secondary-color">
+            <p-chart type="bar" [data]="chartData" [options]="chartOptions" style="width: 100%; height: 300px;"
+              class="custom-bar-chart">
+            </p-chart>
+
+            <div class="mt-3 text-sm flex gap-4">
+              <span>Alta: {{ dashboardSummary.prioridadeAlta }}</span>
+              <span>Média: {{ dashboardSummary.prioridadeMedia }}</span>
+              <span>Baixa: {{ dashboardSummary.prioridadeBaixa }}</span>
+            </div>
+          </div>
+        </p-card>
+      </div>
+    </section>
+
+    <div class="grid">
+      <div class="col-12 lg:col-3">
+        <p-panel header="Filtros" [toggleable]="true" [collapsed]="isMobile" styleClass="mb-4 shadow-1">
+          <form #filterForm="ngForm" class="grid formgrid px-2 gap-4">
+            <!-- Título da Tarefa -->
+            <div class="col-12 md:col-12">
+              <p-inputgroup class="p-field-full-width">
+                <p-inputgroup-addon>
+                  <i class="pi pi-tag"></i>
+                </p-inputgroup-addon>
+                <p-floatlabel variant="on">
+                  <input pInputText id="filterTitulo" name="filterTitulo" type="text" [(ngModel)]="filters.titulo"
+                    maxlength="100" />
+                  <label for="filterTitulo">Título da Tarefa</label>
+                </p-floatlabel>
+              </p-inputgroup>
+            </div>
+
+            <!-- Prioridade -->
+            <div class="col-12 md:col-12">
+              <p-inputgroup class="p-field-full-width">
+                <p-inputgroup-addon>
+                  <i class="pi pi-exclamation-triangle"></i>
+                </p-inputgroup-addon>
+                <p-floatlabel variant="on">
+                  <p-select id="filterPrioridade" name="filterPrioridade" [(ngModel)]="filters.prioridade"
+                    [options]="priorities" optionLabel="label" dataKey="value" [showClear]="true" />
+                  <label for="filterPrioridade">Prioridade</label>
+                </p-floatlabel>
+              </p-inputgroup>
+            </div>
+
+            <!-- Status -->
+            <div class="col-12 md:col-12">
+              <p-inputgroup class="p-field-full-width">
+                <p-inputgroup-addon>
+                  <i class="pi pi-check-circle"></i>
+                </p-inputgroup-addon>
+                <p-floatlabel variant="on">
+                  <p-select id="filterStatus" name="filterStatus" [(ngModel)]="filters.status" [options]="statuses"
+                    optionLabel="label" dataKey="value" [showClear]="true" />
+                  <label for="filterStatus">Status</label>
+                </p-floatlabel>
+              </p-inputgroup>
+            </div>
+
+            <!-- Data Limite -->
+            <div class="col-12 md:col-12">
+              <p-inputgroup class="p-field-full-width">
+                <p-inputgroup-addon>
+                  <i class="pi pi-calendar"></i>
+                </p-inputgroup-addon>
+                <p-floatlabel variant="on">
+                  <p-datepicker id="filterDeadline" name="filterDeadline" [(ngModel)]="filters.deadline" appendTo="body"
+                    dateFormat="dd/mm/yy" showIcon showButtonBar />
+                  <label for="filterDeadline">Data Limite</label>
+                </p-floatlabel>
+              </p-inputgroup>
+            </div>
+
+            <!-- Ações -->
+            <div class="col-12 flex justify-content-end gap-2 mt-2">
+              <p-button label="Filtrar" icon="pi pi-search" size="small" (click)="applyFilters()"
+                [disabled]="filterForm.pristine" aria-label="Aplicar filtros"></p-button>
+              <p-button label="Limpar" icon="pi pi-times" severity="secondary" outlined size="small"
+                (click)="clearFilters()" aria-label="Limpar filtros"></p-button>
+            </div>
+          </form>
+        </p-panel>
+      </div>
+
+      <div class="col-12 lg:col-9">
+        <p-card styleClass="shadow-1 h-full">
+          <ng-container *ngIf="tasks.length > 0; else noTasksMessage">
+            <p-table [value]="tasks" [lazy]="true" (onLazyLoad)="loadTasks($event)" [rows]="10"
+              [totalRecords]="totalRecords" [paginator]="true" [rowsPerPageOptions]="[10, 20, 50]" [first]="first"
+              responsiveLayout="scroll" styleClass="p-datatable-sm" aria-label="Lista de tarefas">
+              <ng-template pTemplate="header">
+                <tr>
+                  <th>Título</th>
+                  <th>Prioridade</th>
+                  <th>Data Limite</th>
+                  <th>Status</th>
+                  <th>Data Cadastro</th>
+                  <th class="w-12rem text-center">Ações</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-task>
+                <tr class="task-row">
+                  <td>{{ task.titulo }}</td>
+                  <td>
+                    <p-tag [value]="task.prioridade" [severity]="getPrioritySeverity(task.prioridade)"
+                      attr.aria-label="Prioridade {{ task.prioridade }}"></p-tag>
+                  </td>
+                  <td>{{ task.deadline | date:'dd/MM/yyyy' }}</td>
+                  <td>
+                    <p-tag [value]="task.status" [severity]="getStatusSeverity(task.status)"
+                      attr.aria-label="Status {{ task.status }}"></p-tag>
+                  </td>
+                  <td>{{ task.dataCadastro }}</td>
+                  <td>
+                    <p-button icon="pi pi-eye" styleClass="p-button-text p-button-info p-button-sm mr-1"
+                      pTooltip="Visualizar" (click)="viewTask(task)" aria-label="Visualizar tarefa"></p-button>
+                    <p-button *ngIf="task.status !== 'CONCLUIDA'" icon="pi pi-pencil"
+                      styleClass="p-button-text p-button-warning p-button-sm mr-1" pTooltip="Editar"
+                      (click)="openEditModal(task)" aria-label="Editar tarefa"></p-button>
+                    <p-button *ngIf="task.status !== 'CONCLUIDA'" icon="pi pi-check"
+                      styleClass="p-button-text p-button-success p-button-sm mr-1" pTooltip="Concluir"
+                      (click)="confirmCompleteTask(task)" aria-label="Concluir tarefa"></p-button>
+                    <p-button icon="pi pi-trash" styleClass="p-button-text p-button-danger p-button-sm"
+                      pTooltip="Excluir" (click)="confirmDeleteTask(task)" aria-label="Excluir tarefa"></p-button>
+                  </td>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="empty">
+                <tr>
+                  <td colspan="6" class="text-center py-4">Nenhuma tarefa encontrada com os filtros aplicados.</td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </ng-container>
+
+          <ng-template #noTasksMessage>
+            <div class="flex flex-column align-items-center justify-content-center p-5">
+              <i class="pi pi-inbox text-5xl text-400 mb-3"></i>
+              <h3 class="text-xl text-text-secondary">Não há dados a serem exibidos.</h3>
+              <p class="text-text-secondary mt-2 mb-4">Cadastre uma nova tarefa para começar!</p>
+              <p-button label="Cadastrar Tarefa" icon="pi pi-plus" styleClass="p-button-primary"
+                (click)="openEditModal(null)" aria-label="Criar nova tarefa"></p-button>
+            </div>
+          </ng-template>
+        </p-card>
+      </div>
+    </div>
+
+    <p-dialog header="Detalhes da Tarefa" [(visible)]="displayViewModal" [modal]="true"
+      [style]="{width: 'min(90vw, 600px)'}" [draggable]="false" [resizable]="false" styleClass="shadow-3"
+      aria-labelledby="viewDialogTitle">
+      <div class="grid formgrid p-2 gap-3" *ngIf="selectedTask">
+
+        <!-- Título -->
+        <div class="col-12">
+          <p-inputgroup class="p-field-full-width">
+            <p-inputgroup-addon><i class="pi pi-tag"></i></p-inputgroup-addon>
+            <p-floatlabel variant="on">
+              <input pInputText id="viewTitulo" [ngModel]="selectedTask.titulo" disabled />
+              <label for="viewTitulo">Título</label>
+            </p-floatlabel>
+          </p-inputgroup>
+        </div>
+
+        <!-- Descrição -->
+        <div class="col-12">
+          <p-inputgroup class="w-full">
+            <p-inputgroup-addon><i class="pi pi-align-left"></i></p-inputgroup-addon>
+            <p-floatlabel variant="on" [ngClass]="{ 'p-float-label-active': true }">
+              <textarea pInputTextarea id="viewDescricao" [ngModel]="selectedTask.descricao" rows="6" disabled
+                style="resize: none; width: 100%"></textarea>
+            </p-floatlabel>
+          </p-inputgroup>
+        </div>
+
+        <!-- Prioridade -->
+        <div class="col-12 md:col-5">
+          <div class="w-full">
+            <p-inputgroup class="w-full">
+              <p-inputgroup-addon><i class="pi pi-exclamation-triangle"></i></p-inputgroup-addon>
+              <p-floatlabel variant="on" class="w-full">
+                <input pInputText id="viewPrioridade" [ngModel]="selectedTask.prioridade" disabled class="w-full" />
+                <label for="viewPrioridade">Prioridade</label>
+              </p-floatlabel>
+            </p-inputgroup>
+          </div>
+        </div>
+
+        <!-- Status -->
+        <div class="col-12 md:col-6">
+          <div class="w-full">
+            <p-inputgroup class="w-full">
+              <p-inputgroup-addon><i class="pi pi-check-circle"></i></p-inputgroup-addon>
+              <p-floatlabel variant="on" class="w-full">
+                <input pInputText id="viewStatus" [ngModel]="selectedTask.status" disabled class="w-full" />
+                <label for="viewStatus">Status</label>
+              </p-floatlabel>
+            </p-inputgroup>
+          </div>
+        </div>
+
+        <!-- Data Limite -->
+        <div class="col-12 md:col-5">
+          <p-inputgroup class="p-field-full-width">
+            <p-inputgroup-addon><i class="pi pi-calendar"></i></p-inputgroup-addon>
+            <p-floatlabel variant="on">
+              <input pInputText id="viewDeadline" [ngModel]="(selectedTask.deadline | date:'dd/MM/yyyy')" disabled />
+              <label for="viewDeadline">Data Limite</label>
+            </p-floatlabel>
+          </p-inputgroup>
+        </div>
+
+        <!-- Data Cadastro -->
+        <div class="col-12 md:col-6">
+          <p-inputgroup class="p-field-full-width">
+            <p-inputgroup-addon><i class="pi pi-clock"></i></p-inputgroup-addon>
+            <p-floatlabel variant="on">
+              <input pInputText id="viewDataCadastro" [ngModel]="(selectedTask.dataCadastro)" disabled />
+              <label for="viewDataCadastro">Data de Cadastro</label>
+            </p-floatlabel>
+          </p-inputgroup>
+        </div>
+      </div>
+
+      <ng-template pTemplate="footer">
+        <p-button label="Fechar" icon="pi pi-times" styleClass="p-button-outlined p-button-sm" (click)="cancelModal()"
+          aria-label="Fechar modal"></p-button>
+      </ng-template>
+    </p-dialog>
+
+
+    <p-dialog header="{{ selectedTask?.id ? 'Editar Tarefa' : 'Nova Tarefa' }}" [(visible)]="displayEditModal"
+      [modal]="true" [style]="{ width: 'min(90vw, 600px)' }" [draggable]="false" [resizable]="false"
+      styleClass="shadow-3" aria-labelledby="editDialogTitle" [closable]="false" [focusOnShow]="true">
+
+      <form #taskForm="ngForm" (ngSubmit)="saveTask(taskForm)" *ngIf="selectedTask" novalidate autocomplete="off"
+        class="p-fluid" style="padding: 0.6rem;">
+
+        <!-- TÍTULO -->
+        <div class="p-field">
+          <p-inputgroup class="p-field-full-width">
+            <p-inputgroup-addon>
+              <i class="pi pi-tag"></i>
+            </p-inputgroup-addon>
+            <p-floatlabel variant="on">
+              <input pInputText id="editTitulo" name="titulo" [(ngModel)]="selectedTask.titulo" required maxlength="100"
+                #titulo="ngModel" aria-required="true" [attr.aria-invalid]="titulo.invalid && titulo.touched" />
+              <label for="editTitulo">Título *</label>
+            </p-floatlabel>
+          </p-inputgroup>
+          <div *ngIf="titulo.invalid && titulo.touched" class="p-error">
+            <p-message severity="error" text="Título é obrigatório e no máximo 100 caracteres."
+              *ngIf="titulo.errors?.['required'] || titulo.errors?.['maxlength']"></p-message>
+          </div>
+        </div>
+
+        <!-- DESCRIÇÃO -->
+        <div class="p-field">
+          <p-inputgroup class="p-field-full-width">
+            <p-inputgroup-addon>
+              <i class="pi pi-align-left"></i>
+            </p-inputgroup-addon>
+            <p-floatlabel variant="on">
+              <textarea pInputTextarea id="editDescricao" name="descricao" [(ngModel)]="selectedTask.descricao" rows="6"
+                style="resize: none; width: 100%;" maxlength="500" #descricao="ngModel"
+                aria-required="false"></textarea>
+              <label *ngIf="!selectedTask?.id" for="editDescricao">Descrição</label>
+            </p-floatlabel>
+          </p-inputgroup>
+          <div *ngIf="descricao.errors?.['maxlength'] && descricao.touched" class="p-error">
+            <p-message severity="error" text="Descrição deve ter no máximo 500 caracteres."></p-message>
+          </div>
+        </div>
+
+        <!-- PRIORIDADE -->
+        <div class="p-field">
+          <p-inputgroup class="p-field-full-width">
+            <p-inputgroup-addon>
+              <i class="pi pi-exclamation-triangle"></i>
+            </p-inputgroup-addon>
+            <p-floatlabel variant="on">
+              <p-select inputId="editPrioridade" name="prioridade" [(ngModel)]="selectedTask.prioridade"
+                [options]="priorities" optionLabel="label" optionValue="value" dataKey="value" required
+                #prioridade="ngModel" aria-required="true"
+                [attr.aria-invalid]="prioridade.invalid && prioridade.touched">
+              </p-select>
+              <label for="editPrioridade">Prioridade *</label>
+            </p-floatlabel>
+          </p-inputgroup>
+          <div *ngIf="prioridade.invalid && prioridade.touched" class="p-error">
+            <p-message severity="error" text="Prioridade é obrigatória."></p-message>
+          </div>
+        </div>
+
+        <!-- DATA LIMITE -->
+        <div class="p-field">
+          <p-inputgroup class="p-field-full-width">
+            <p-inputgroup-addon>
+              <i class="pi pi-calendar"></i>
+            </p-inputgroup-addon>
+            <p-floatlabel variant="on">
+              <p-datepicker inputId="editDeadline" name="deadline" [(ngModel)]="selectedTask.deadline" [showIcon]="true"
+                dateFormat="dd/mm/yy" required #deadline="ngModel" aria-required="true"
+                [attr.aria-invalid]="deadline.invalid && deadline.touched" appendTo="body" styleClass="mini-datepicker"
+                [minDate]="minDate">
+              </p-datepicker>
+              <label for="editDeadline">Data Limite *</label>
+            </p-floatlabel>
+          </p-inputgroup>
+          <div *ngIf="deadline.invalid && deadline.touched" class="p-error">
+            <p-message severity="error" text="Data Limite é obrigatória."></p-message>
+          </div>
+        </div>
+
+        <!-- AÇÕES DO MODAL -->
+        <div class="form-actions" style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
+          <p-button label="Cancelar" icon="pi pi-times" type="button"
+            styleClass="p-button-outlined p-button-secondary p-button-sm" (click)="cancelModal()"
+            aria-label="Cancelar"></p-button>
+          <p-button label="Salvar" icon="pi pi-check" type="submit" styleClass="p-button-primary p-button-sm"
+            [disabled]="taskForm.invalid || taskForm.pristine" aria-label="Salvar tarefa"></p-button>
+        </div>
+
+      </form>
+
+    </p-dialog>
+
+
+  </div>
+</div>
