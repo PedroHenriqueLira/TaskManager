@@ -1,0 +1,26 @@
+2025-07-27 12:12:12.198 [ERROR] Error: Usuário inexistente ou senha inválida
+2025-07-27 12:12:18.680 [ERROR] Error: Usuário inexistente ou senha inválida
+2025-07-27 12:12:25.087 [ERROR] Error: Usuário inexistente ou senha inválida
+2025-07-27 12:13:33.162 [ERROR] Error: Usuário inexistente ou senha inválida
+2025-07-27 12:14:42.221 [ERROR] Error: Usuário inexistente ou senha inválida
+2025-07-27 12:14:43.740 [ERROR] Error: Usuário inexistente ou senha inválida
+2025-07-27 12:14:44.692 [ERROR] Error: Usuário inexistente ou senha inválida
+2025-07-27 12:14:50.454 [ERROR] Error: Usuário inexistente ou senha inválida
+2025-07-27 14:14:33.806 [ERROR] Error: No static resource auth/register.
+2025-07-27 14:23:12.239 [ERROR] Error: Usuário inexistente ou senha inválida
+2025-07-27 14:23:43.257 [ERROR] Error: Erro - Falha ao Cadastrar - Email já está sendo utilizado por outro usuário.
+2025-07-27 14:23:52.801 [ERROR] Error: Erro - Falha ao Cadastrar - Email já está sendo utilizado por outro usuário.
+2025-07-27 15:40:46.397 [ERROR] Error: No static resource task/2/concluir.
+2025-07-27 15:40:50.171 [ERROR] Error: No static resource task/2.
+2025-07-27 16:06:37.588 [ERROR] Error: No static resource task/6.
+2025-07-27 16:10:40.015 [ERROR] Error: Request method 'PUT' is not supported
+2025-07-27 16:10:41.232 [ERROR] Error: Request method 'PUT' is not supported
+2025-07-27 16:11:01.309 [ERROR] Error: Erro - Falha ao Editar - A data limite deve ser maior ou igual a data atual.
+2025-07-27 16:11:14.182 [ERROR] Error: Erro - Falha ao Editar - A data limite deve ser maior ou igual a data atual.
+2025-07-27 16:11:14.340 [ERROR] Error: Erro - Falha ao Editar - A data limite deve ser maior ou igual a data atual.
+2025-07-27 16:11:14.494 [ERROR] Error: Erro - Falha ao Editar - A data limite deve ser maior ou igual a data atual.
+2025-07-27 16:11:14.644 [ERROR] Error: Erro - Falha ao Editar - A data limite deve ser maior ou igual a data atual.
+2025-07-27 16:11:14.805 [ERROR] Error: Erro - Falha ao Editar - A data limite deve ser maior ou igual a data atual.
+2025-07-27 16:11:14.958 [ERROR] Error: Erro - Falha ao Editar - A data limite deve ser maior ou igual a data atual.
+2025-07-27 16:11:38.395 [ERROR] Error: Erro - Falha ao Editar - A data limite deve ser maior ou igual a data atual.
+2025-07-27 19:22:07.581 [ERROR] Error: Erro - Falha ao Editar - A data limite deve ser maior ou igual a data atual.

@@ -1,0 +1,25 @@
+2025-07-25 15:39:51.940 [ERROR] Error: Erro no filtro 'responsavel.id': Filtro inválido: responsavel.id
+2025-07-25 15:40:17.697 [ERROR] Error: Erro no filtro 'responsavel.id': Filtro inválido: responsavel.id
+2025-07-25 15:46:58.847 [ERROR] Error: No static resource task/editar.
+2025-07-25 15:47:01.911 [ERROR] Error: No static resource task/editar.
+2025-07-25 15:47:04.825 [ERROR] Error: No static resource task/editar.
+2025-07-25 15:47:07.743 [ERROR] Error: Request method 'GET' is not supported
+2025-07-25 15:47:11.802 [ERROR] Error: Erro - Falha ao Editar - Dados não encontrado para o id informado.
+2025-07-25 15:47:12.790 [ERROR] Error: Erro - Falha ao Editar - Dados não encontrado para o id informado.
+2025-07-25 15:47:13.668 [ERROR] Error: Erro - Falha ao Editar - Dados não encontrado para o id informado.
+2025-07-25 15:47:17.422 [ERROR] Error: Could not initialize proxy [com.project.tasks.api.model.Usuario#1] - no session
+2025-07-25 15:49:50.723 [ERROR] Error: Request method 'PUT' is not supported
+2025-07-25 15:50:11.166 [ERROR] Error: Erro - Falha ao Editar - Status inválido. Valores válidos: [ANDAMENTO, CONCLUIDO].
+2025-07-25 15:50:21.141 [ERROR] Error: could not execute batch [Batch entry 0 update public.tarefas set data_update=('2025-07-25 15:50:21.126895-03'),deadline=('2025-07-25 -03'),descricao=('Teste de cadastro de Tarefa'),prioridade=('BAIXA'),responsavel_id=('1'::int8),status=('CONCLUIDO'),titulo=('task Teste 123441q2') where id=('1'::int8) was aborted: ERRO: a nova linha da relação "tarefas" viola a restrição de verificação "ck_status"
+  Detalhe: Registro que falhou contém (1, task Teste 123441q2, Teste de cadastro de Tarefa, 1, BAIXA, 2025-07-25, CONCLUIDO, 2025-07-25 15:38:52.458302, 2025-07-25 15:50:21.126895).  Call getNextException to see other errors in the batch.] [update public.tarefas set data_update=?,deadline=?,descricao=?,prioridade=?,responsavel_id=?,status=?,titulo=? where id=?]; SQL [update public.tarefas set data_update=?,deadline=?,descricao=?,prioridade=?,responsavel_id=?,status=?,titulo=? where id=?]; constraint [null]
+2025-07-25 15:50:30.973 [ERROR] Error: could not execute batch [Batch entry 0 update public.tarefas set data_update=('2025-07-25 15:50:30.969715-03'),deadline=('2025-07-25 -03'),descricao=('Teste de cadastro de Tarefa'),prioridade=('BAIXA'),responsavel_id=('1'::int8),status=('CONCLUIDO'),titulo=('task Teste 123441q2') where id=('1'::int8) was aborted: ERRO: a nova linha da relação "tarefas" viola a restrição de verificação "ck_status"
+  Detalhe: Registro que falhou contém (1, task Teste 123441q2, Teste de cadastro de Tarefa, 1, BAIXA, 2025-07-25, CONCLUIDO, 2025-07-25 15:38:52.458302, 2025-07-25 15:50:30.969715).  Call getNextException to see other errors in the batch.] [update public.tarefas set data_update=?,deadline=?,descricao=?,prioridade=?,responsavel_id=?,status=?,titulo=? where id=?]; SQL [update public.tarefas set data_update=?,deadline=?,descricao=?,prioridade=?,responsavel_id=?,status=?,titulo=? where id=?]; constraint [null]
+2025-07-25 15:51:13.660 [ERROR] Error: Erro - Falha ao Editar - Status inválido. Valores válidos: [ANDAMENTO, CONCLUIDO].
+2025-07-25 15:51:50.609 [ERROR] Error: Erro - Falha ao Editar - Status inválido. Valores válidos: [ANDAMENTO, CONCLUIDA].
+2025-07-25 15:52:24.253 [ERROR] Error: Erro - Falha ao Editar - Status inválido. Valores válidos: [ANDAMENTO, CONCLUIDA].
+2025-07-25 16:00:34.139 [ERROR] Error: Erro - Falha de Busca - Dados do Usuário não encontrados.
+2025-07-25 16:00:37.927 [ERROR] Error: Request method 'GET' is not supported
+2025-07-25 16:42:04.906 [ERROR] Error: No static resource v3/api-docs.
+2025-07-25 16:55:06.076 [ERROR] Error: No static resource v3/api-docs.
+2025-07-25 16:56:54.981 [ERROR] Error: No static resource v3/api-docs.
+2025-07-25 17:00:01.122 [ERROR] Error: No static resource v3/api-docs.
